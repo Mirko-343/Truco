@@ -119,6 +119,8 @@ def verificar_envido(puntos_jugador : int, puntos_rival : int, tipo : str, ganad
         6. Los puntos objetivo
         Devuelve una tupla con los puntos del jugador y del rival luego de la asignación de puntos '''
     
+    
+
     if puntos_jugador > puntos_rival:
         mas_puntos = puntos_jugador
     elif puntos_jugador < puntos_rival:
