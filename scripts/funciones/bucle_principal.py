@@ -106,7 +106,7 @@ def definir_envido(cartas_asingadas) -> int:
     total_puntos += 20
     return total_puntos
 
-def verificar_envido(puntos_jugador : int, puntos_rival : int, tipo : str, ganador_envido : str, mano : str, 
+def verificar_envido(puntos_jugador : int, puntos_rival : int, tipo : str, envido_jugador : int, envido_rival : int, mano : str, 
                      puntos_objetivo : int) -> tuple:
     
     ''' Función que permite asignar los puntos correspondientes al envido dependiendo el tipo y quién ganó.
@@ -119,7 +119,12 @@ def verificar_envido(puntos_jugador : int, puntos_rival : int, tipo : str, ganad
         6. Los puntos objetivo
         Devuelve una tupla con los puntos del jugador y del rival luego de la asignación de puntos '''
     
-    
+    if envido_jugador > envido_rival:
+        ganador_envido = "jugador"
+    elif envido_jugador < envido_rival:
+        ganador_envido = "rival"
+    else:
+        ganador_envido = "empate"
 
     if puntos_jugador > puntos_rival:
         mas_puntos = puntos_jugador
@@ -143,18 +148,22 @@ def verificar_envido(puntos_jugador : int, puntos_rival : int, tipo : str, ganad
     else:
         if mano == 1:
             puntos_jugador += puntos
+            ganador_envido = "jugador"
         elif mano == -1:
             puntos_rival += puntos
+            ganador_envido = "rival"
     
-    return puntos_jugador, puntos_rival
+    return ganador_envido, puntos_jugador, puntos_rival
 
-def definir_truco(carta_jugador, carta_rival, puntos):
-    if carta_jugador["Orden"] > carta_rival["Orden"]:
+def definir_vuelta(carta_jugador, carta_rival):
+    if carta_jugador["Orden"] < carta_rival["Orden"]:
         ganador = 1
-    elif carta_jugador["Orden"] < carta_rival["Orden"]:
+    elif carta_jugador["Orden"] > carta_rival["Orden"]:
         ganador = -1
     else:
         ganador = 0
+        
+    return ganador
         
 def asignar_puntos_truco(ganador_truco : int, tipo : str, puntos_jugador : int, puntos_rival : int) -> tuple:
     
