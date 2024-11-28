@@ -155,32 +155,48 @@ def verificar_envido(puntos_jugador : int, puntos_rival : int, tipo : str, envid
     
     return ganador_envido, puntos_jugador, puntos_rival
 
-def definir_vuelta(carta_jugador, carta_rival):
+def definir_mano(carta_jugador : dict, carta_rival : dict, rondas_ganadas_jugador : int, rondas_ganadas_rival : int, empates : int, mano : int):  
     if carta_jugador["Orden"] < carta_rival["Orden"]:
-        ganador = 1
+        ganador = "jugador"
+        rondas_ganadas_jugador += 1
     elif carta_jugador["Orden"] > carta_rival["Orden"]:
+        ganador = "rival"
+        rondas_ganadas_rival += 1
+    else:
+        ganador = "empate"
+        empates += 1
+        
+    if rondas_ganadas_jugador == 2:
+        ganador = 1
+    elif rondas_ganadas_rival == 2:
         ganador = -1
-    else:
-        ganador = 0
-        
-    return ganador
-        
-def asignar_puntos_truco(ganador_truco : int, tipo : str, puntos_jugador : int, puntos_rival : int) -> tuple:
-    
-    if tipo == "truco":
-        puntos = 2
-    elif tipo == "retruco":
-        puntos = 3
-    elif tipo == "vale cuatro":
-        puntos = 4
-        
-    if ganador_truco == 1:
-        puntos_jugador += puntos
-    elif ganador_truco == -1:
-        puntos_rival += puntos
-    else:
-        return puntos_jugador, puntos_rival
+    elif empates == 2 == 1 and rondas_ganadas_jugador:
+        ganador = 1
+    elif empates == 2  and rondas_ganadas_rival == 1:
+        ganador = -1
+    elif empates == 3:
+        ganador = mano
 
+    return ganador, rondas_ganadas_jugador, rondas_ganadas_rival
+        
+def verificar_mano(ganador_mano : int, tipo_truco : str, puntos_jugador : int, puntos_rival : int):
+    
+    
+
+    if tipo_truco == "truco":
+        puntos = 2
+    elif tipo_truco == "retruco":
+        puntos = 3
+    elif tipo_truco == "vale cuatro":
+        puntos = 4
+    else:
+        puntos = 1
+
+    if ganador_mano == 1:
+        puntos_jugador += puntos
+    else:
+        puntos_rival += puntos
+        
     return puntos_jugador, puntos_rival
 
         

@@ -45,7 +45,7 @@ def generar_listado_cartas(ruta_archivo : str, ruta_imagenes : str) -> None:
 
                 nueva_carta = {"Numero" : int(valores[0]),
                                "Palo" : valores[1],
-                               "Orden" : valores[2],
+                               "Orden" : int(valores[2]),
                                "Orden envido" : int(valores[3]),
                                "Ruta foto": ruta_foto}
                 

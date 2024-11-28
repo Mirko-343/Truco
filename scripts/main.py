@@ -18,12 +18,9 @@ while run_game: # Bucle de ejecución del juego
     
     # CODIGO DEL MENU PRINCIPAL
     pygame.display.set_caption("Menu")
-
-    MENU_MOUSE_POS = pygame.mouse.get_pos()
     
     scrn.VENTANA_PRINCIPAL.blit(scrn.BOTON_JUGAR, scrn.BTN_JUGAR_RECT)
     
-
     scrn.VENTANA_PRINCIPAL.blit(txt.MENU_HEAD, txt.MENU_HEAD_RECT)
 
     for event in pygame.event.get():
