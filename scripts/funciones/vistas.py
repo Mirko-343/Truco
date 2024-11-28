@@ -28,6 +28,7 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
     carta_elegida = None
     carta_rival = None
     x_adicional = 0
+    limite_vueltas = 0
 
     
 
@@ -39,6 +40,13 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
     jugador_jugo = False
     carta_rival_elegida = False
     mostrar_carta_rival = False
+    carta_1_elegida = False
+    carta_2_elegida = False
+    carta_3_elegida = False
+    mostrar_rival_1 = False
+    mostrar_rival_2 = False
+    mostrar_rival_3 = False
+    
 
     # ====================================== Carga de imagenes ======================================
         
@@ -49,7 +57,7 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
     x_3 = (scrn.ANCHO_PANTALLA // 2) + 160
     y_3 = 500
 
-    x_r_1 = (scrn.ANCHO_PANTALLA // 2) - 300
+    x_r_1 = (scrn.ANCHO_PANTALLA // 2) - 350
     y_r_1 = 100
     
 
@@ -83,6 +91,10 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
     
     while run:
 
+        if mano == -1:
+            limite_vueltas = 5
+        else:
+            limite_vueltas = 6
 
         if numero_turnos == 2 or numero_turnos == 3:
             x_adicional = 200
@@ -128,31 +140,30 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                         puntos_rival += 1
                         envido_cantado = True
                         print("Rechazaste el envido.")
-                elif hit_box_carta_1.collidepoint(event.pos) and turno == 1:
+                elif hit_box_carta_1.collidepoint(event.pos) and turno == 1 and carta_1_elegida == False:
                     print("Click en carta 1")
                     carta_elegida = cartas_jugador[0]
                     jugador_jugo = True
-                    cartas_jugador.pop(0)
                     x_1 = 200 + x_adicional
                     y_1 = 220
                     hit_box_carta_1.center = (x_1 , y_1)
-                elif hit_box_carta_2.collidepoint(event.pos) and turno == 1:
+                    carta_1_elegida = True
+                elif hit_box_carta_2.collidepoint(event.pos) and turno == 1 and carta_2_elegida == False:
                     print("Click en carta 2")
                     carta_elegida = cartas_jugador[1]
                     jugador_jugo = True
-                    cartas_jugador.pop(1)
                     x_2 = 200 + x_adicional
                     y_2 = 220
                     hit_box_carta_2.center = (x_2 , y_2)
-                elif hit_box_carta_3.collidepoint(event.pos) and turno == 1:
+                    carta_2_elegida = True
+                elif hit_box_carta_3.collidepoint(event.pos) and turno == 1 and carta_3_elegida == False:
                     print("Click en carta 3")
                     carta_elegida = cartas_jugador[2]
                     jugador_jugo = True
-                    cartas_jugador.pop(2)
                     x_3 = 200 + x_adicional
                     y_3 = 220
                     hit_box_carta_3.center = (x_3 , y_3)
-
+                    carta_3_elegida = True
 
 
 
@@ -175,21 +186,62 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                 scrn.VENTANA_PRINCIPAL.blit(BTN_RECHAZAR_EVDO, BTN_RECHAZAR_EVDO_RECT)
          
         # El rival elige su carta
-        if turno == -1 and envido_cantado and carta_rival_elegida == False: # Si va el primero 
-            carta_rival = random.choice(cartas_rival)
-            print("El rival eligió su carta")
-            rival_jugo = True
-            carta_rival_elegida = True
-        elif turno == -1 and envido_cantado and carta_elegida != None and carta_rival_elegida == False: # Si primero va el jugador
-            carta_rival = random.choice(cartas_rival)
-            print("El rival eligió su carta")
-            rival_jugo = True
-            carta_rival_elegida = True
+        
+        
+        # if numero_turnos < limite_vueltas:
+        #     if turno == -1 and envido_cantado and carta_rival_elegida == False:
+        #         posicion = random.randint(0, len(cartas_rival))
+        #         carta_rival = cartas_rival[posicion]
+        #         cartas_rival.pop(posicion)
+        #         rival_jugo = True
+        #         carta_rival_elegida = True
+
+        if numero_turnos < limite_vueltas:        
+            if turno == -1 and envido_cantado and carta_rival_elegida == False : # Si va el primero 
+                carta_rival = random.choice(cartas_rival)      
+                print("El rival eligió su carta")
+                if mostrar_rival_1:
+                    while carta_rival == cartas_rival[0]:
+                        carta_rival = random.choice(cartas_rival)
+                    if mostrar_rival_2:
+                        while carta_rival == cartas_rival[1] or carta_rival == cartas_rival[0]:
+                            carta_rival = random.choice(cartas_rival)
+                    elif mostrar_rival_3:
+                        while carta_rival == cartas_rival[2] or carta_rival == cartas_rival[0]:
+                            carta_rival = random.choice(cartas_rival)
+                if mostrar_rival_2:
+                    while carta_rival == cartas_rival[1]:
+                        carta_rival = random.choice(cartas_rival)
+                    if mostrar_rival_1:
+                        while carta_rival == cartas_rival[1] or carta_rival == cartas_rival[0]:
+                            carta_rival = random.choice(cartas_rival)
+                    elif mostrar_rival_3:
+                        while carta_rival == cartas_rival[2] or carta_rival == cartas_rival[1]:
+                            carta_rival = random.choice(cartas_rival)
+                elif mostrar_rival_3:
+                    while carta_rival == cartas_rival[2]:
+                        carta_rival = random.choice(cartas_rival)
+                    if mostrar_rival_1:
+                        while carta_rival == cartas_rival[2] or carta_rival == cartas_rival[0]:
+                            carta_rival = random.choice(cartas_rival)
+                    elif mostrar_rival_2:
+                        while carta_rival == cartas_rival[2] or carta_rival == cartas_rival[1]:
+                            carta_rival = random.choice(cartas_rival)
+                rival_jugo = True
+                carta_rival_elegida = True
+            
+
+
+        # elif turno == -1 and envido_cantado and carta_elegida != None and carta_rival_elegida == False: # Si primero va el jugador
+        #     carta_rival = random.choice(cartas_rival)
+        #     print("El rival eligió su carta")
+        #     rival_jugo = True
+        #     carta_rival_elegida = True
             
         # Se define el ganador de la vuelta
         if carta_rival != None and carta_elegida != None:
             ganador_vuelta = definir_vuelta(carta_elegida, carta_rival)
-            print(f"El ganador de la vuelta fue {ganador_vuelta}. El rival eligió {carta_rival} y vos {carta_elegida}")
+            print(f"El ganador de la vuelta fue {ganador_vuelta}.")
 
         # ====================================== Actualización de elementos en pantalla ======================================
 
@@ -198,12 +250,36 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
         scrn.VENTANA_PRINCIPAL.blit(carta_2, hit_box_carta_2)
         scrn.VENTANA_PRINCIPAL.blit(carta_3, hit_box_carta_3)
         
-        if carta_rival_elegida:
-            if numero_turnos == 0 or numero_turnos == 1:
+
+        if numero_turnos < limite_vueltas:
+            if carta_rival_elegida:
+                if carta_rival == cartas_rival[0]:
+                    print(f"El rival elgió el {cartas_rival[0]["Numero"]} de {cartas_rival[0]["Palo"]}")
+                    carta_rival_1_rect.center = ((200 + x_adicional), 150)              
+                    mostrar_rival_1 = True 
+                    #print("Se descartó la primer carta del rival")
+                elif carta_rival == cartas_rival[1]:
+                    print(f"El rival elgió el {cartas_rival[1]["Numero"]} de {cartas_rival[1]["Palo"]}")
+                    carta_rival_2_rect.center = ((200 + x_adicional), 150)                            
+                    mostrar_rival_2 = True
+                    #print("Se descartó la segunda carta del rival")
+                elif carta_rival == cartas_rival[2]:
+                    print(f"El rival elgió el {cartas_rival[2]["Numero"]} de {cartas_rival[2]["Palo"]}")
+                    carta_rival_3_rect.center = ((200 + x_adicional), 150)   
+                    mostrar_rival_3 = True
+                    #print("Se descartó la tercer carta del rival")
                 mostrar_carta_rival = True
                 
-        if mostrar_carta_rival:
-            scrn.VENTANA_PRINCIPAL.blit(carta_rival_1, (x_r_1, y_r_1))
+
+           
+        if mostrar_rival_1:
+            scrn.VENTANA_PRINCIPAL.blit(carta_rival_1, carta_rival_1_rect)
+        if mostrar_rival_2:
+            scrn.VENTANA_PRINCIPAL.blit(carta_rival_2, carta_rival_2_rect)
+        if mostrar_rival_3:
+            scrn.VENTANA_PRINCIPAL.blit(carta_rival_3, carta_rival_3_rect)
+                
+
 
         # Cargar botones
         pygame.draw.rect(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_ENVIDO_RECT)
@@ -239,16 +315,19 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
             turno *= -1
             numero_turnos += 1 
             print("Turno del rival")
+            print(f"Numero de turnos: {numero_turnos}")
         elif rival_jugo == True and turno == -1:
             turno *= -1
             numero_turnos += 1   
-            print(f"Turno del jugador {turno}")
+            print(f"Turno del jugador")
+            print(f"Numero de turnos: {numero_turnos}")
         
         if jugador_jugo and rival_jugo:
             jugador_jugo = False
             carta_elegida = None
             rival_jugo = False
             carta_rival = None
+            carta_rival_elegida = False
         
 
         # if ronda_completada == True:
