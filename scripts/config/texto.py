@@ -23,6 +23,25 @@ GANASTE_ENVIDO_RECT = GANASTE_ENVIDO.get_rect(center = ((ANCHO_PANTALLA // 2), 1
 PERDISTE_ENVIDO = fuente.render("Perdiste el envido!", True, BLANCO)
 PERDISTE_ENVIDO_RECT = PERDISTE_ENVIDO.get_rect(center = ((ANCHO_PANTALLA // 2), 180))
 
+MOSTRAR_TANTO_RIVAL = fuente.render("Tanto del rival", True, BLANCO)
+MOSTRAR_TANTO_RIVAL_RECT = MOSTRAR_TANTO_RIVAL.get_rect(center = ((ANCHO_PANTALLA // 2), 200))
+
+PERDISTE = fuente.render("Perdiste la mano. Repartiendo cartas...", True, BLANCO)
+PERDISTE_RECT = PERDISTE.get_rect(center = ((ANCHO_PANTALLA // 2), (ALTO_PANTALLA // 2)))
+
+GANASTE = fuente.render("Ganaste la mano. Repartiendo cartas...", True, BLANCO)
+GANASTE_RECT = GANASTE.get_rect(center = ((ANCHO_PANTALLA // 2), (ALTO_PANTALLA // 2)))
+
+GANASTE_PARTIDA = fuente.render("GANASTE LA PARTIDA! Volviendo al menú principal", True, BLANCO)
+GANASTE_PARTIDA_RECT = GANASTE_PARTIDA.get_rect(center = ((ANCHO_PANTALLA // 2), (ALTO_PANTALLA // 2)))
+
+PERDISTE_PARTIDA = fuente.render("PERDISTE LA PARTIDA :( Volviendo al menú principal", True, BLANCO)
+PERDISTE_PARTIDA_RECT = PERDISTE_PARTIDA.get_rect(center = ((ANCHO_PANTALLA // 2), (ALTO_PANTALLA // 2)))
+
+INGRESE_NOMBRE = fuente.render("Ingrese su nombre: ", True, NEGRO)
+INGRESE_NOMBRE_RECT =  INGRESE_NOMBRE.get_rect(center = ((ANCHO_PANTALLA // 2), 160))
+
+
 def mostrar_puntos(puntos : int, pj : str, x, y):
     fuente_puntos = pygame.font.SysFont("Arial", 20)
     texto = "Puntos del " + pj + " " + str(puntos)

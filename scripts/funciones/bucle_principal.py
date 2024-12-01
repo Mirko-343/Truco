@@ -156,6 +156,17 @@ def verificar_envido(puntos_jugador : int, puntos_rival : int, tipo : str, envid
     return ganador_envido, puntos_jugador, puntos_rival
 
 def definir_mano(carta_jugador : dict, carta_rival : dict, rondas_ganadas_jugador : int, rondas_ganadas_rival : int, empates : int, mano : int):  
+    
+    ''' Define el ganador de una mano (cuando ambos jugadores ya eligieron sus cartas). Parámetros:
+        1. La carta elegida por el jugador
+        2. La carta elegida por el rival
+        3. La variable que representa las rondas ganadas por el jugador
+        4. La variable que representa las rondas ganadas por el rival
+        5. La cantidad de rondas que resultaron en empate
+        6. Quién es mano
+        Devuelve una tupla con tres datos: el ganador de la ronda o de la mano en caso de que corresponda, las rondas ganadas por el jugador y
+        las rondas ganadas por el rival '''
+
     if carta_jugador["Orden"] < carta_rival["Orden"]:
         ganador = "jugador"
         rondas_ganadas_jugador += 1
@@ -170,18 +181,25 @@ def definir_mano(carta_jugador : dict, carta_rival : dict, rondas_ganadas_jugado
         ganador = 1
     elif rondas_ganadas_rival == 2:
         ganador = -1
-    elif empates == 2 == 1 and rondas_ganadas_jugador:
+    elif empates == 2 and rondas_ganadas_jugador == 1:
         ganador = 1
-    elif empates == 2  and rondas_ganadas_rival == 1:
+    elif empates == 2 and rondas_ganadas_rival == 1:
         ganador = -1
+    elif empates == 1 and rondas_ganadas_jugador == 1 and rondas_ganadas_rival == 1:
+        ganador = mano
     elif empates == 3:
         ganador = mano
 
     return ganador, rondas_ganadas_jugador, rondas_ganadas_rival
         
-def verificar_mano(ganador_mano : int, tipo_truco : str, puntos_jugador : int, puntos_rival : int):
+def verificar_mano(ganador_mano : int, tipo_truco : str, puntos_jugador : int, puntos_rival : int) -> tuple:
     
-    
+    ''' Permite asignar los puntos correspondientes al ganador de una mano. Parámetros:
+        1. El ganador de la mano
+        2. El tipo de truco que se cantó (puede ser igual a None)
+        3. Los puntos del jugador
+        4. Los puntos del rival
+        Devuelve una tupla con los puntos del jugador y del rival actualizados '''
 
     if tipo_truco == "truco":
         puntos = 2
@@ -198,6 +216,10 @@ def verificar_mano(ganador_mano : int, tipo_truco : str, puntos_jugador : int, p
         puntos_rival += puntos
         
     return puntos_jugador, puntos_rival
+
+
+
+
 
         
         

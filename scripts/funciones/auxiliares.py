@@ -70,10 +70,30 @@ def cargar_imagen(nombre_imagen : str, ruta_imagen : str, posicion : tuple) -> p
 
 def crear_boton(fuente : str, font_size : float, ancho : int, alto : int, texto : str, color_texto : tuple,
                 x : int, y : int) -> pygame.Rect:
-    
+    ''' Permite crear un botón. Parámetros
+        1. Fuente que se desea usar en el texto del botón
+        2. Tamaño de la fuente
+        3. y 4. Ancho y alto del botón respectivamente
+        5. El texto que tiene que contener el botón
+        6. El color del texto dentro del botón
+        7. y 8. Las coordenadas (x ; y) respectivamente del botón en pantalla
+        Como primer valor devuelve el texto y segundo devuelve el rect asociado '''
+
     font = pygame.font.SysFont(fuente, font_size)
     # button_surface = pygame.Surface(ancho, alto)
     text = font.render(texto, True, color_texto)
     button_rect = pygame.Rect(x, y, ancho, alto)
     
     return text, button_rect
+
+def mostrar_boton(superficie : pygame.Surface, color_boton : tuple, button_surface : pygame.Surface, button_rect : pygame.Rect) -> None:
+    ''' Función que realiza las acciones necesarias para mostrar un botón ya creado en pantalla. Parámetros:
+        1. Superficie donde se va a mostrar el botón
+        2. Color deseado para el botón
+        3. La superficie del botón
+        4. El rectángulo asociado al botón '''
+        
+    pygame.draw.rect(superficie, color_boton, button_rect)
+    superficie.blit(button_surface, button_rect)
+    
+
