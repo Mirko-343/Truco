@@ -1,6 +1,7 @@
 ﻿# Imports
 import pygame
 import pygame_gui
+import csv
 
 from config import colores as clrs
 from config import texto as txt
@@ -8,69 +9,11 @@ from config import pantalla as scrn
 from .auxiliares import *
 from .bucle_principal import *
 
-
-def main():
-    
-    pygame.init()
-
-    run_game = True
-
-
-    while run_game: # Bucle de ejecución del juego
-    
-        # CODIGO DEL MENU PRINCIPAL
-        pygame.display.set_caption("Menu")
-    
-        BTN_JUGAR, BTN_JUGAR_RECT = crear_boton("Arial", 30, 80, 40, "Jugar", clrs.NEGRO, (scrn.ANCHO_PANTALLA // 2), (scrn.ALTO_PANTALLA // 2))
-        
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run_game = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if BTN_JUGAR_RECT.collidepoint(event.pos):
-                    
-                    nombre_jugador = obtener_nombre()
-                    print(nombre_jugador)
-                    # Funcion de la vista para elegir rival
-                    rival = elegir_rival()
-                
-                    # Funcion de la vista para elegir a cuántos puntos puntos
-                    puntos_objetivo = 8
-
-                    # Reinciar variables para cada partida
-                    puntos_rival = 0
-                    puntos_jugador = 0
-                    puntos_rival
-                    ronda = 0
-                    mano = random.choice([-1, 1])
-
-                    while puntos_jugador < puntos_objetivo and puntos_rival < puntos_objetivo:
-                        if rival == "aleatorio":
-                            puntos_jugador, puntos_rival, nombre_jugador = jugar_vs_aleatorio(puntos_objetivo, ronda, 
-                                                                  puntos_jugador, puntos_rival, mano, nombre_jugador)
-                            ronda += 1
-                            mano *= -1
-                    actualizar_registro(nombre_jugador)
-        
-        scrn.VENTANA_PRINCIPAL.fill(clrs.NEGRO)
-        
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_JUGAR, BTN_JUGAR_RECT)
-        # scrn.VENTANA_PRINCIPAL.blit(scrn.BOTON_JUGAR, scrn.BTN_JUGAR_RECT)
-    
-        scrn.VENTANA_PRINCIPAL.blit(txt.MENU_HEAD, txt.MENU_HEAD_RECT)
-
-                
-        pygame.display.update()
-    
-
-    pygame.quit()
-    
 def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int, puntos_rival : int, mano : int, 
                        nombre_jugador : str):
     
     # Asiganación de cartas
-    info_cartas = "./media/info_cartas.csv"
+    info_cartas = "./media/registros/info_cartas.csv"
     ruta_imagenes = "./media/imagenes/cartas"
     lista_cartas = generar_listado_cartas(info_cartas,ruta_imagenes)
 
@@ -145,6 +88,7 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
     print(f"Turno: {numero_tiradas}")
 
     while run:
+        
 
         if mano == -1:
             limite_vueltas = 5
@@ -156,6 +100,7 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
         elif numero_tiradas == 4 or numero_tiradas == 6:
             x_adicional = 400
         
+                
         # ====================================== Verificación de eventos ======================================
         event_list = pygame.event.get()
         for event in event_list:
@@ -166,12 +111,8 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                     print("Click botón envido")
                     ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, "envido", 
                                                                                     envido_jugador, envido_rival, mano, puntos_objetivo)
-                    if puntos_jugador >= puntos_objetivo:
-                         finalizar_mano(puntos_jugador, puntos_rival, True, False)
-                         return puntos_jugador, puntos_rival, nombre_jugador
-                         print("ganaste la partida")
-                    elif puntos_rival >= puntos_objetivo:
-                        finalizar_mano(puntos_jugador, puntos_rival, False, True)
+                    gano_alguien = verificar_vicotria(puntos_jugador, puntos_rival, puntos_objetivo, nombre_jugador)
+                    if gano_alguien:
                         return puntos_jugador, puntos_rival, nombre_jugador
                     envido_cantado = True
                     print(f"Cantaste envido y el ganador fue {ganador_envido}")
@@ -179,24 +120,16 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                     ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, "falta envido", 
                                                                                     envido_jugador, envido_rival, mano, puntos_objetivo)
                     envido_cantado = True
-                    if puntos_jugador >= puntos_objetivo:
-                         finalizar_mano(puntos_jugador, puntos_rival, True, False)
-                         return puntos_jugador, puntos_rival, nombre_jugador
-                         print("ganaste la partida")
-                    elif puntos_rival >= puntos_objetivo:
-                        finalizar_mano(puntos_jugador, puntos_rival, False, True)
+                    gano_alguien = verificar_vicotria(puntos_jugador, puntos_rival, puntos_objetivo, nombre_jugador)
+                    if gano_alguien:
                         return puntos_jugador, puntos_rival, nombre_jugador
                     print(f"Cantaste Falta envido y el ganador fue {ganador_envido}")
                 elif BTN_REAL_ENVIDO_RECT.collidepoint(event.pos) and turno == 1 and numero_tiradas == 0: # Cantar real envido
                     ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, "real envido", 
                                                                                     envido_jugador, envido_rival, mano, puntos_objetivo)
                     envido_cantado = True
-                    if puntos_jugador >= puntos_objetivo:
-                         finalizar_mano(puntos_jugador, puntos_rival, True, False)
-                         return puntos_jugador, puntos_rival, nombre_jugador
-                         print("ganaste la partida")
-                    elif puntos_rival >= puntos_objetivo:
-                        finalizar_mano(puntos_jugador, puntos_rival, False, True)
+                    gano_alguien = verificar_vicotria(puntos_jugador, puntos_rival, puntos_objetivo, nombre_jugador)
+                    if gano_alguien:
                         return puntos_jugador, puntos_rival, nombre_jugador
                     print(f"Cantaste Real envido y el ganador fue {ganador_envido}") # Cantar real
                 elif BTN_ACEPTAR_EVDO_RECT.collidepoint(event.pos): # Aceptar envido
@@ -209,12 +142,8 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                             ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, 
                                                            "envido", envido_jugador, envido_rival, mano, puntos_objetivo)
                             print(f"Aceptaste el envido y el ganador fue: {ganador_envido}")
-                        if puntos_jugador >= puntos_objetivo:
-                            finalizar_mano(puntos_jugador, puntos_rival, True, False)
-                            return puntos_jugador, puntos_rival, nombre_jugador
-                            print("ganaste la partida")
-                        elif puntos_rival >= puntos_objetivo:
-                            finalizar_mano(puntos_jugador, puntos_rival, False, True)
+                        gano_alguien = verificar_vicotria(puntos_jugador, puntos_rival, puntos_objetivo, nombre_jugador)
+                        if gano_alguien:
                             return puntos_jugador, puntos_rival, nombre_jugador
                     envido_cantado = True
                 elif BTN_RECHAZAR_EVDO_RECT.collidepoint(event.pos): # Rechazar envido
@@ -222,8 +151,8 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                         ganador_envido = "rival"
                         puntos_rival += 1
                         envido_cantado = True
-                        if puntos_rival >= puntos_objetivo:
-                            finalizar_mano(puntos_jugador, puntos_rival, False, True)
+                        gano_alguien = verificar_vicotria(puntos_jugador, puntos_rival, puntos_objetivo, nombre_jugador)
+                        if gano_alguien:
                             return puntos_jugador, puntos_rival, nombre_jugador
                         print("Rechazaste el envido.")
                 elif hit_box_carta_1.collidepoint(event.pos) and turno == 1 and carta_1_elegida == False: # Elegir carta 1
@@ -495,8 +424,5 @@ def obtener_nombre():
     pygame.quit()
     
 
-def actualizar_registro(nombre_jugador : str):
     
-    with open("./media/registros.csv", "a") as archivo:
-        
-        archivo.write(nombre_jugador + "\n")
+

@@ -1,6 +1,7 @@
 ﻿
 import os
 import pygame
+import csv
 
 def inicializar_matriz(cantidad_filas : int, cantidad_columnas : int, valor_inicial : any) -> list:
     ''' Inicializa una matriz.
@@ -96,4 +97,43 @@ def mostrar_boton(superficie : pygame.Surface, color_boton : tuple, button_surfa
     pygame.draw.rect(superficie, color_boton, button_rect)
     superficie.blit(button_surface, button_rect)
     
+
+def actualizar_registros(nombre_jugador: str, victoria: bool, derrota: bool):
+    registro_actualizado = False
+    registros = []
+
+    # Leer y actualizar los registros
+    with open("./media/registros/registros.csv", "r") as archivo:
+        registro = csv.reader(archivo)
+        for line in registro:
+            if line[0] == nombre_jugador:
+                print("Se encontró un registro con el mismo nombre")
+                if victoria:
+                    victorias = int(line[1])
+                    victorias += 1
+                    line[1] = str(victorias)
+                    registro_actualizado = True
+                    print("Registro actualizado por victoria")
+                elif derrota:
+                    derrotas = int(line[2])
+                    derrotas += 1
+                    line[2] = str(derrotas)
+                    registro_actualizado = True
+                    print("Registro actualizado por derrota")
+            registros.append(line)
+
+    # Si no se actualizó, agregar un nuevo registro
+    if not registro_actualizado:
+        print("No se encontró un registro con el mismo nombre")
+        if victoria:
+            registros.append([nombre_jugador, "1", "0"])
+        elif derrota:
+            registros.append([nombre_jugador, "0", "1"])
+
+    # Sobrescribir el archivo con los nuevos registros
+    with open("./media/registros/registros.csv", "w", newline='') as archivo:
+        escritor = csv.writer(archivo)
+        escritor.writerows(registros)
+
+
 

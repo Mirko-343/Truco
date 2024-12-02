@@ -2,6 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\media",
+    "\\media\\imagenes",
+    "\\media\\registros",
     "\\scripts",
     "\\scripts\\config",
     "\\scripts\\funciones"

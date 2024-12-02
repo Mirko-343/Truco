@@ -212,12 +212,26 @@ def verificar_mano(ganador_mano : int, tipo_truco : str, puntos_jugador : int, p
 
     if ganador_mano == 1:
         puntos_jugador += puntos
-    else:
+    elif ganador_mano == -1:
         puntos_rival += puntos
         
     return puntos_jugador, puntos_rival
 
+def verificar_vicotria(puntos_jugador : int, puntos_rival : int, puntos_objetivo : int, nombre_jugador):
+    
+    from .vistas import finalizar_mano
 
+    if puntos_jugador >= puntos_objetivo:
+        finalizar_mano(puntos_jugador, puntos_rival, True, False)
+        return True
+        print("ganaste la partida")
+    elif puntos_rival >= puntos_objetivo:
+        finalizar_mano(puntos_jugador, puntos_rival, False, True)
+        return True
+    else:
+        return False
+    
+    
 
 
 
