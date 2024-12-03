@@ -1,6 +1,7 @@
 ﻿import random
 
 def asignar_cartas(listado_cartas) -> list:
+    
     ''' Genera dos listados con 3 cartas (diccionarios) cada uno.
         Como parámetro recibe el listado de diccionarios con la información de todas las cartas
         Devuelve una tupla con las dos listas '''
@@ -109,7 +110,7 @@ def definir_envido(cartas_asingadas) -> int:
 def verificar_envido(puntos_jugador : int, puntos_rival : int, tipo : str, envido_jugador : int, envido_rival : int, mano : str, 
                      puntos_objetivo : int) -> tuple:
     
-    ''' Función que permite asignar los puntos correspondientes al envido dependiendo el tipo y quién ganó.
+    ''' Define el ganador del envido y permite asignar los puntos correspondientes dependiendo el tipo y quién ganó.
         Parámetros:
         1. Puntos actuales del jugador
         2. Puntos acutales del rival
@@ -196,7 +197,7 @@ def verificar_mano(ganador_mano : int, tipo_truco : str, puntos_jugador : int, p
     
     ''' Permite asignar los puntos correspondientes al ganador de una mano. Parámetros:
         1. El ganador de la mano
-        2. El tipo de truco que se cantó (puede ser igual a None)
+        2. El tipo de truco que se cantó (puede ser igual a None en caso de que no se haya cantado)
         3. Los puntos del jugador
         4. Los puntos del rival
         Devuelve una tupla con los puntos del jugador y del rival actualizados '''
@@ -219,6 +220,14 @@ def verificar_mano(ganador_mano : int, tipo_truco : str, puntos_jugador : int, p
 
 def verificar_vicotria(puntos_jugador : int, puntos_rival : int, puntos_objetivo : int, nombre_jugador):
     
+    ''' Permite verificar si el rival o el jugador ganaron la partida. Parámetros:
+        1. Los puntos acutales del jugador
+        2. Los puntos actuales del rival
+        3. Los puntos objetivo
+        4. El nombre del jugador 
+        En caso de que alguno de los dos haya gandado llama a la función finalizar_mano() para mostrar la información en pantalla
+        Devuelve True si ganó alguien y False en caso contrario'''
+
     from .vistas import finalizar_mano
 
     if puntos_jugador >= puntos_objetivo:

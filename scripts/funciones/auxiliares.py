@@ -1,12 +1,13 @@
-﻿
-import os
+﻿import os
 import pygame
 import csv
 
 def inicializar_matriz(cantidad_filas : int, cantidad_columnas : int, valor_inicial : any) -> list:
-    ''' Inicializa una matriz.
-        Primer parámetro: cantidad filas / Segundo parámetro: cantidad columnas
-        Tercer parámetro (opcional): valor inicial'''
+    ''' Inicializa una matriz. Parámetros:
+        1. Cantidad de filas
+        2. Cantidad de columnas
+        3. Valor inical
+        Devuelve la matriz inicializada y con los valores iniciales cargados'''
 
     matriz = []
     
@@ -17,17 +18,21 @@ def inicializar_matriz(cantidad_filas : int, cantidad_columnas : int, valor_inic
     return matriz
 
 def recorrer_matriz(matriz):
+    ''' Permite recorrer una matriz. Recibe como parámetro la matriz a recorrer '''
+    
     for i in range(len(matriz)): 
         for j in range(len(matriz[i])):
             print(f"\nFila {i} columna {j}: {matriz[i][j]}")     
 
 def generar_listado_cartas(ruta_archivo : str, ruta_imagenes : str) -> None:
+    
     ''' Genera una lista de diccionarios donde cada diccionario es una carta y continen la información de la misma.
         Las Key son:
-        1- Número
-        2- Palo
-        3- Orden de valor en el juego
-        4- Ruta de la imagen correspondiente.
+        1. Numero
+        2. Palo
+        3. Orden (de valor en el juego)
+        4. Orden envido
+        5. Ruta foto (ruta de la imagen correspondiente a esa carta)
         Como primer parámetro recibe la ruta del archivo donde se encuentra la información de las cartas. Debe ser un .csv
         Como segundo parámetro recibe la ruta de la carpeta donde están las imágenes de las cartas.'''
     
@@ -55,11 +60,12 @@ def generar_listado_cartas(ruta_archivo : str, ruta_imagenes : str) -> None:
     return(lista_cartas)
              
 def cargar_imagen(nombre_imagen : str, ruta_imagen : str, posicion : tuple) -> pygame.Surface | pygame.Rect:
-    ''' Realiza los pasos necesarios para cargar una imagen y manipular su posición a través del rect asociado
+    
+    ''' Realiza los pasos necesarios para cargar una imagen y manipular su posición a través del rect asociado. Parámetros:
         1. Nombre de la imagen
         2. Ruta de la imagen
         3. Posición deseada en pantalla 
-        Devuelve una Surface con la imagen y el Rect asociado a la misma '''
+        Devuelve una Surface con la imagen y el Rect asociado a la misma. '''
 
     rect = "hit_box_" + nombre_imagen
     
@@ -71,6 +77,7 @@ def cargar_imagen(nombre_imagen : str, ruta_imagen : str, posicion : tuple) -> p
 
 def crear_boton(fuente : str, font_size : float, ancho : int, alto : int, texto : str, color_texto : tuple,
                 x : int, y : int) -> pygame.Rect:
+    
     ''' Permite crear un botón. Parámetros
         1. Fuente que se desea usar en el texto del botón
         2. Tamaño de la fuente
@@ -88,6 +95,7 @@ def crear_boton(fuente : str, font_size : float, ancho : int, alto : int, texto 
     return text, button_rect
 
 def mostrar_boton(superficie : pygame.Surface, color_boton : tuple, button_surface : pygame.Surface, button_rect : pygame.Rect) -> None:
+    
     ''' Función que realiza las acciones necesarias para mostrar un botón ya creado en pantalla. Parámetros:
         1. Superficie donde se va a mostrar el botón
         2. Color deseado para el botón
@@ -97,8 +105,15 @@ def mostrar_boton(superficie : pygame.Surface, color_boton : tuple, button_surfa
     pygame.draw.rect(superficie, color_boton, button_rect)
     superficie.blit(button_surface, button_rect)
     
-
 def actualizar_registros(nombre_jugador: str, victoria: bool, derrota: bool):
+    
+    ''' Función que permite actualizar los registros donde se guardan los datos de cada jugador. Si encuentra un registro con
+        el mismo nombre lo actualiza, si no existe crea uno. Parámetros:
+        1. El nombre del jugador para el cual se quiere actualizar / crear un registro
+        2. Un bool que indique si la partida terminó en victoria
+        3. Un bool que indique si la partida terminó en derrota
+        No devuelve nada. Únicamente actualiza el archvio '''
+
     registro_actualizado = False
     registros = []
 
@@ -106,7 +121,7 @@ def actualizar_registros(nombre_jugador: str, victoria: bool, derrota: bool):
     with open("./media/registros/registros.csv", "r") as archivo:
         registro = csv.reader(archivo)
         for line in registro:
-            if line[0] == nombre_jugador:
+            if line[0] == nombre_jugador: # Si se encuentra un registro con el mismo nombre
                 print("Se encontró un registro con el mismo nombre")
                 if victoria:
                     victorias = int(line[1])
@@ -122,7 +137,7 @@ def actualizar_registros(nombre_jugador: str, victoria: bool, derrota: bool):
                     print("Registro actualizado por derrota")
             registros.append(line)
 
-    # Si no se actualizó, agregar un nuevo registro
+    # Si no se encontró un registro con el mismo nombre, agregar un nuevo registro
     if not registro_actualizado:
         print("No se encontró un registro con el mismo nombre")
         if victoria:
@@ -135,5 +150,7 @@ def actualizar_registros(nombre_jugador: str, victoria: bool, derrota: bool):
         escritor = csv.writer(archivo)
         escritor.writerows(registros)
 
-
-
+def ordenar_cartas(lista_cartas : list) -> list:
+    
+    cartas_ordenadas = sorted(lista_cartas, key = lambda carta : carta["Orden"])
+    
