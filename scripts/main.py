@@ -12,6 +12,14 @@ from funciones import vistas
 pygame.init()
 pygame.mixer.init()
 
+# ====================================== Carga de imágenes ======================================
+fondo = pygame.image.load("./media/imagenes/fondo.jpg")
+titulo, titulo_rect = auxiliares.cargar_imagen("titulo.jpg", "./media/imagenes/titulo.png", ((scrn.ANCHO_PANTALLA // 2), 160))
+boton_jugar, boton_jugar_rect = auxiliares.cargar_imagen("boton_jugar" , "./media/imagenes/boton_con_texto_grande.png", 
+                                                            ((scrn.ANCHO_PANTALLA // 2), 330))
+
+pygame.mixer.music.load("./media/audio/menu.mp3")
+pygame.mixer.music.play(loops=-1)
 
 
 run_game = True
@@ -19,13 +27,6 @@ run_game = True
 
 while run_game: # Bucle de ejecución del juego   
     pygame.display.set_caption("Menu")
-    
-    BTN_JUGAR, BTN_JUGAR_RECT = auxiliares.crear_boton("Arial", 30, 80, 40, "Jugar", clrs.NEGRO, (scrn.ANCHO_PANTALLA // 2), (scrn.ALTO_PANTALLA // 2))
-        
-    # ====================================== Carga de imágenes ======================================
-    fondo = pygame.image.load("./media/imagenes/portada.jpg")
-    titulo, titulo_rect = auxiliares.cargar_imagen("titulo.jpg", "./media/imagenes/titulo.png", ((scrn.ANCHO_PANTALLA // 2), 160))
-    boton_jugar, boton_jugar_rect = auxiliares.cargar_imagen("boton_jugar" , "./media/imagenes/boton_jugar.png", (300, 330))
 
 
     # ====================================== Verificación de eventos ======================================
@@ -34,7 +35,7 @@ while run_game: # Bucle de ejecución del juego
         if event.type == pygame.QUIT:
             run_game = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if BTN_JUGAR_RECT.collidepoint(event.pos):
+            if boton_jugar_rect.collidepoint(event.pos):
                 
                 # Obetener nombre del jugador
                 nombre_jugador = vistas.obtener_nombre()
@@ -80,6 +81,5 @@ while run_game: # Bucle de ejecución del juego
 
     scrn.VENTANA_PRINCIPAL.blit(boton_jugar, boton_jugar_rect)
 
-    auxiliares.mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_JUGAR, BTN_JUGAR_RECT)   
                 
     pygame.display.update()

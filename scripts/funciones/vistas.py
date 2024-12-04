@@ -1,4 +1,5 @@
 ﻿# Imports
+from tkinter.tix import TEXT
 import pygame
 import pygame_gui
 import csv
@@ -77,20 +78,21 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
     carta_rival_1, carta_rival_1_rect = cargar_imagen("carta_rival_1", cartas_rival[0]["Ruta foto"], (0, 0))
     carta_rival_2, carta_rival_2_rect = cargar_imagen("carta_rival_2", cartas_rival[1]["Ruta foto"], (0, 0))
     carta_rival_3, carta_rival_3_rect = cargar_imagen("carta_rival_3", cartas_rival[2]["Ruta foto"], (0, 0))
-
+    
+    fondo_madera, fondo_madera_rect = cargar_imagen("fondo", "./media/imagenes/madera.jpg", ((scrn.ANCHO_PANTALLA // 2), (scrn.ALTO_PANTALLA // 2)))
+    
     # ====================================== Carga de botones ======================================
     
-    BTN_ENVIDO, BTN_ENVIDO_RECT = crear_boton("Arial", 30, 100, 40, "Envido", clrs.NEGRO, 45, 300)
-    BTN_REAL_ENVIDO, BTN_REAL_ENVIDO_RECT = crear_boton("Arial", 30, 165, 40, "Real Envido", clrs.NEGRO, 45, 350)
-    BTN_FALTA_ENVIDO, BTN_FALTA_ENVIDO_RECT = crear_boton("Arial", 30, 170, 40, "Falta Envido", clrs.NEGRO, 45, 400)
+    btn_envido, btn_envido_rect = cargar_imagen("envido", "./media/imagenes/btn_envido.png", (75, 300))
+    btn_real_envido, btn_real_envido_rect = cargar_imagen("real envido", "./media/imagenes/btn_real_envido.png", (75, 350))
+    btn_falta_envido, btn_falta_envido_rect = cargar_imagen("real envido", "./media/imagenes/btn_falta_envido.png", (75, 400))
+
+    btn_aceptar_evdo, btn_aceptar_evdo_rect = cargar_imagen("aceptar", "./media/imagenes/btn_si.png", (360, 130))
+    btn_rechazar_evdo, btn_rechazar_evdo_rect = cargar_imagen("rechazar", "./media/imagenes/btn_no.png", (560, 130))
     
-    BTN_ACEPTAR_EVDO, BTN_ACEPTAR_EVDO_RECT = crear_boton("Arail", 30, 60, 40, "Si", clrs.NEGRO, 300, 130)
-    BTN_RECHAZAR_EVDO, BTN_RECHAZAR_EVDO_RECT = crear_boton("Arail", 30, 60, 40, "No", clrs.NEGRO, 500, 130)
-
-    BTN_TRUCO, BTN_TRUCO_RECT = crear_boton("Arial", 30, 100, 40, "Truco", clrs.NEGRO, 815 , 300)
-    BTN_RE_TRUCO, BTN_RE_TRUCO_RECT = crear_boton("Arial", 30, 165, 40, "Retruco", clrs.NEGRO, 755 , 350)
-    BTN_VALE_CUATRO, BTN_VALE_CUATRO_RECT = crear_boton("Arial", 30, 165, 40, "Vale cuatro", clrs.NEGRO, 755 , 400)
-
+    btn_truco, btn_truco_rect = cargar_imagen("truco", "./media/imagenes/btn_truco.png", (815 , 300))
+    btn_retruco, btn_retruco_rect = cargar_imagen("truco", "./media/imagenes/btn_retruco.png", (815 , 350))
+    btn_vale_cuatro, btn_vale_cuatro_rect = cargar_imagen("truco", "./media/imagenes/btn_vale4.png", (815 , 400))
 
     # ====================================== Bucle de ejecución ======================================
     clock = pygame.time.Clock()
@@ -118,7 +120,7 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
             if event.type == pygame.QUIT:
                 run = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if BTN_ENVIDO_RECT.collidepoint(event.pos) and turno == 1 and numero_tiradas == 0: # Cantar envido
+                if btn_envido_rect.collidepoint(event.pos) and turno == 1 and numero_tiradas == 0: # Cantar envido
                     ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, "envido", 
                                                                                     envido_jugador, envido_rival, mano, puntos_objetivo)                   
                     gano_alguien = verificar_vicotria(puntos_jugador, puntos_rival, puntos_objetivo, nombre_jugador)                  
@@ -126,7 +128,7 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                         return puntos_jugador, puntos_rival, nombre_jugador
                     envido_cantado = True               
                     print(f"Cantaste envido y el ganador fue {ganador_envido}")
-                elif BTN_FALTA_ENVIDO_RECT.collidepoint(event.pos) and turno == 1 and numero_tiradas == 0: # Cantar falta envido
+                elif btn_falta_envido_rect.collidepoint(event.pos) and turno == 1 and numero_tiradas == 0: # Cantar falta envido
                     ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, "falta envido", 
                                                                                     envido_jugador, envido_rival, mano, puntos_objetivo)
                     envido_cantado = True
@@ -134,7 +136,7 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                     if gano_alguien:
                         return puntos_jugador, puntos_rival, nombre_jugador
                     print(f"Cantaste Falta envido y el ganador fue {ganador_envido}")
-                elif BTN_REAL_ENVIDO_RECT.collidepoint(event.pos) and turno == 1 and numero_tiradas == 0: # Cantar real envido
+                elif btn_real_envido_rect.collidepoint(event.pos) and turno == 1 and numero_tiradas == 0: # Cantar real envido
                     ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, "real envido", 
                                                                                     envido_jugador, envido_rival, mano, puntos_objetivo)
                     envido_cantado = True
@@ -142,7 +144,7 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                     if gano_alguien:
                         return puntos_jugador, puntos_rival, nombre_jugador
                     print(f"Cantaste Real envido y el ganador fue {ganador_envido}")
-                elif BTN_ACEPTAR_EVDO_RECT.collidepoint(event.pos): # Aceptar envido
+                elif btn_aceptar_evdo_rect.collidepoint(event.pos): # Aceptar envido
                     if numero_tiradas == 0 or numero_tiradas == 1:
                         if envido_rival >= 30:
                             ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, 
@@ -156,7 +158,7 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                         if gano_alguien:
                             return puntos_jugador, puntos_rival, nombre_jugador
                     envido_cantado = True
-                elif BTN_RECHAZAR_EVDO_RECT.collidepoint(event.pos): # Rechazar envido
+                elif btn_rechazar_evdo_rect.collidepoint(event.pos): # Rechazar envido
                     if numero_tiradas == 0 or numero_tiradas == 1:
                         ganador_envido = "rival"
                         puntos_rival += 1
@@ -183,15 +185,15 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                     jugador_jugo = True
                     hit_box_carta_3.center = (240 + x_adicional , 220)
                     carta_3_elegida = True
-                elif BTN_TRUCO_RECT.collidepoint(event.pos) and turno == 1 and truco_cantado == False:  # Cantar truco
+                elif btn_truco_rect.collidepoint(event.pos) and turno == 1 and truco_cantado == False:  # Cantar truco
                     print("Cantaste truco")
                     tipo_truco = "truco"
                     truco_cantado = True 
-                elif BTN_RE_TRUCO_RECT.collidepoint(event.pos) and turno == 1 and truco_cantado == False: # Cantar retruco
+                elif btn_retruco_rect.collidepoint(event.pos) and turno == 1 and truco_cantado == False: # Cantar retruco
                     print("Cantaste retruco")
                     tipo_truco = "retruco"
                     truco_cantado = True
-                elif BTN_VALE_CUATRO_RECT.collidepoint(event.pos) and turno == 1 and truco_cantado == False: # Cantar vale cuatro
+                elif btn_vale_cuatro_rect.collidepoint(event.pos) and turno == 1 and truco_cantado == False: # Cantar vale cuatro
                     print("Cantaste Vale Cuatro")
                     tipo_truco = "vale cuatro"
                     truco_cantado = True
@@ -199,9 +201,12 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
 
 
         # ====================================== Desarrollo de la lógica ======================================
-        
-        scrn.VENTANA_PRINCIPAL.fill(clrs.NEGRO)
 
+        scrn.VENTANA_PRINCIPAL.fill(clrs.NEGRO)
+        scrn.VENTANA_PRINCIPAL.blit(fondo_madera, fondo_madera_rect)
+
+
+        
         # El rival canta envido / falta envido
         if numero_tiradas == 0 or numero_tiradas == 1:           
             if turno == -1 and envido_cantado == False:
@@ -210,11 +215,9 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
                 else:
                     scrn.VENTANA_PRINCIPAL.blit(txt.RIVAL_ENVIDO, txt.RIVAL_ENVIDO_RECT)
 
-                pygame.draw.rect(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_ACEPTAR_EVDO_RECT)
-                scrn.VENTANA_PRINCIPAL.blit(BTN_ACEPTAR_EVDO, BTN_ACEPTAR_EVDO_RECT)
+                scrn.VENTANA_PRINCIPAL.blit(btn_aceptar_evdo, btn_aceptar_evdo_rect)
             
-                pygame.draw.rect(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_RECHAZAR_EVDO_RECT)
-                scrn.VENTANA_PRINCIPAL.blit(BTN_RECHAZAR_EVDO, BTN_RECHAZAR_EVDO_RECT)
+                scrn.VENTANA_PRINCIPAL.blit(btn_rechazar_evdo, btn_rechazar_evdo_rect)
           
 
         # El rival elige su carta   
@@ -245,6 +248,7 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
 
         # ====================================== Actualización de elementos en pantalla ======================================
 
+
         # Mostrar cartas del jugador
         scrn.VENTANA_PRINCIPAL.blit(carta_1, hit_box_carta_1)
         scrn.VENTANA_PRINCIPAL.blit(carta_2, hit_box_carta_2)
@@ -258,16 +262,15 @@ def jugar_vs_aleatorio(puntos_objetivo : int, rondas : int, puntos_jugador : int
         if mostrar_rival_3:
             scrn.VENTANA_PRINCIPAL.blit(carta_rival_3, carta_rival_3_rect)
                 
-        # Mostrar botones envido
-        
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_ENVIDO, BTN_ENVIDO_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_REAL_ENVIDO, BTN_REAL_ENVIDO_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_FALTA_ENVIDO, BTN_FALTA_ENVIDO_RECT)
+        # Mostrar botones envido       
+        scrn.VENTANA_PRINCIPAL.blit(btn_envido, btn_envido_rect)
+        scrn.VENTANA_PRINCIPAL.blit(btn_real_envido, btn_real_envido_rect)
+        scrn.VENTANA_PRINCIPAL.blit(btn_falta_envido, btn_falta_envido_rect)
         
         # Mostrar botones truco
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_TRUCO, BTN_TRUCO_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_RE_TRUCO, BTN_RE_TRUCO_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_VALE_CUATRO, BTN_VALE_CUATRO_RECT)      
+        scrn.VENTANA_PRINCIPAL.blit(btn_truco, btn_truco_rect)
+        scrn.VENTANA_PRINCIPAL.blit(btn_retruco, btn_retruco_rect)
+        scrn.VENTANA_PRINCIPAL.blit(btn_vale_cuatro, btn_vale_cuatro_rect)  
         
         # Mostrar textos       
         PTS_JUGADOR, PTS_JUGADOR_RECT = txt.mostrar_puntos(puntos_jugador, "jugador", 800, 225)
@@ -405,19 +408,22 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
     carta_rival_1, carta_rival_1_rect = cargar_imagen("carta_rival_1", cartas_rival[0]["Ruta foto"], (0, 0))
     carta_rival_2, carta_rival_2_rect = cargar_imagen("carta_rival_2", cartas_rival[1]["Ruta foto"], (0, 0))
     carta_rival_3, carta_rival_3_rect = cargar_imagen("carta_rival_3", cartas_rival[2]["Ruta foto"], (0, 0))
+    
+    fondo_madera, fondo_madera_rect = cargar_imagen("fondo", "./media/imagenes/madera.jpg", ((scrn.ANCHO_PANTALLA // 2), (scrn.ALTO_PANTALLA // 2)))
 
     # ====================================== Carga de botones ======================================
     
-    BTN_ENVIDO, BTN_ENVIDO_RECT = crear_boton("Arial", 30, 100, 40, "Envido", clrs.NEGRO, 45, 300)
-    BTN_REAL_ENVIDO, BTN_REAL_ENVIDO_RECT = crear_boton("Arial", 30, 165, 40, "Real Envido", clrs.NEGRO, 45, 350)
-    BTN_FALTA_ENVIDO, BTN_FALTA_ENVIDO_RECT = crear_boton("Arial", 30, 170, 40, "Falta Envido", clrs.NEGRO, 45, 400)
+    btn_envido, btn_envido_rect = cargar_imagen("envido", "./media/imagenes/btn_envido.png", (75, 300))
+    btn_real_envido, btn_real_envido_rect = cargar_imagen("real envido", "./media/imagenes/btn_real_envido.png", (75, 350))
+    btn_falta_envido, btn_falta_envido_rect = cargar_imagen("real envido", "./media/imagenes/btn_falta_envido.png", (75, 400))
     
-    BTN_ACEPTAR_EVDO, BTN_ACEPTAR_EVDO_RECT = crear_boton("Arail", 30, 60, 40, "Si", clrs.NEGRO, 300, 130)
-    BTN_RECHAZAR_EVDO, BTN_RECHAZAR_EVDO_RECT = crear_boton("Arail", 30, 60, 40, "No", clrs.NEGRO, 500, 130)
 
-    BTN_TRUCO, BTN_TRUCO_RECT = crear_boton("Arial", 30, 100, 40, "Truco", clrs.NEGRO, 815 , 300)
-    BTN_RE_TRUCO, BTN_RE_TRUCO_RECT = crear_boton("Arial", 30, 165, 40, "Retruco", clrs.NEGRO, 755 , 350)
-    BTN_VALE_CUATRO, BTN_VALE_CUATRO_RECT = crear_boton("Arial", 30, 165, 40, "Vale cuatro", clrs.NEGRO, 755 , 400)
+    btn_aceptar_evdo, btn_aceptar_evdo_rect = cargar_imagen("aceptar", "./media/imagenes/btn_si.png", (360, 130))
+    btn_rechazar_evdo, btn_rechazar_evdo_rect = cargar_imagen("rechazar", "./media/imagenes/btn_no.png", (560, 130))
+
+    btn_truco, btn_truco_rect = cargar_imagen("truco", "./media/imagenes/btn_truco.png", (815 , 300))
+    btn_retruco, btn_retruco_rect = cargar_imagen("truco", "./media/imagenes/btn_retruco.png", (815 , 350))
+    btn_vale_cuatro, btn_vale_cuatro_rect = cargar_imagen("truco", "./media/imagenes/btn_vale4.png", (815 , 400))
 
 
     # ====================================== Bucle de ejecución ======================================
@@ -443,7 +449,7 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
             if event.type == pygame.QUIT:
                 run = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if BTN_ENVIDO_RECT.collidepoint(event.pos) and turno == 1: # Cantar envido
+                if btn_envido_rect.collidepoint(event.pos) and turno == 1: # Cantar envido
                     if numero_tiradas == 0 or numero_tiradas == 1 and envido_cantado == False:
                         print("Click botón envido")
                         if envido_rival >= 27:
@@ -458,7 +464,7 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
                             print("El rival rechazó el envido")
                             puntos_jugador += 1
                     envido_cantado = True
-                elif BTN_FALTA_ENVIDO_RECT.collidepoint(event.pos) and turno == 1 and envido_cantado == False: # Cantar falta envido
+                elif btn_falta_envido_rect.collidepoint(event.pos) and turno == 1 and envido_cantado == False: # Cantar falta envido
                     if numero_tiradas == 0 or numero_tiradas == 1:
                         if envido_rival >= 27:
                             ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, "falta envido", 
@@ -472,7 +478,7 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
                             print("El rival rechazó el envido")
                             puntos_jugador += 1
                     envido_cantado = True    
-                elif BTN_REAL_ENVIDO_RECT.collidepoint(event.pos) and turno == 1 and envido_cantado == False: # Cantar real envido
+                elif btn_real_envido_rect.collidepoint(event.pos) and turno == 1 and envido_cantado == False: # Cantar real envido
                     if numero_tiradas == 0 or numero_tiradas == 1:
                         if envido_rival >= 27:
                             ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, "real envido", 
@@ -486,7 +492,7 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
                             print("El rival rechazó el envido")
                             puntos_jugador += 1
                     envido_cantado = True
-                elif BTN_ACEPTAR_EVDO_RECT.collidepoint(event.pos): # Aceptar envido
+                elif btn_aceptar_evdo_rect.collidepoint(event.pos): # Aceptar envido
                     if numero_tiradas == 0 or numero_tiradas == 1:
                         if envido_rival >= 27:
                             ganador_envido, puntos_jugador, puntos_rival = verificar_envido(puntos_jugador, puntos_rival, 
@@ -496,7 +502,7 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
                         if gano_alguien:
                             return puntos_jugador, puntos_rival, nombre_jugador
                     envido_cantado = True
-                elif BTN_RECHAZAR_EVDO_RECT.collidepoint(event.pos): # Rechazar envido
+                elif btn_rechazar_evdo_rect.collidepoint(event.pos): # Rechazar envido
                     if numero_tiradas == 0 or numero_tiradas == 1:
                         ganador_envido = "rival"
                         puntos_rival += 1
@@ -523,15 +529,15 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
                     jugador_jugo = True
                     hit_box_carta_3.center = (240 + x_adicional , 220)
                     carta_3_elegida = True
-                elif BTN_TRUCO_RECT.collidepoint(event.pos) and turno == 1 and truco_cantado == False:  # Cantar truco
+                elif btn_truco_rect.collidepoint(event.pos) and turno == 1 and truco_cantado == False:  # Cantar truco
                     print("Cantaste truco")
                     tipo_truco = "truco"
                     truco_cantado = True 
-                elif BTN_RE_TRUCO_RECT.collidepoint(event.pos) and turno == 1 and truco_cantado == False: # Cantar retruco
+                elif btn_retruco_rect.collidepoint(event.pos) and turno == 1 and truco_cantado == False: # Cantar retruco
                     print("Cantaste retruco")
                     tipo_truco = "retruco"
                     truco_cantado = True
-                elif BTN_VALE_CUATRO_RECT.collidepoint(event.pos) and turno == 1 and truco_cantado == False: # Cantar vale cuatro
+                elif btn_vale_cuatro_rect.collidepoint(event.pos) and turno == 1 and truco_cantado == False: # Cantar vale cuatro
                     print("Cantaste Vale Cuatro")
                     tipo_truco = "vale cuatro"
                     truco_cantado = True
@@ -539,8 +545,10 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
 
 
         # ====================================== Desarrollo de la lógica ======================================
-        
+                
         scrn.VENTANA_PRINCIPAL.fill(clrs.NEGRO)
+
+        scrn.VENTANA_PRINCIPAL.blit(fondo_madera, fondo_madera_rect)
 
         # El rival canta envido / falta envido
         if numero_tiradas == 0 or numero_tiradas == 1:           
@@ -548,11 +556,9 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
                 if envido_rival >= 27:
                     scrn.VENTANA_PRINCIPAL.blit(txt.RIVAL_ENVIDO, txt.RIVAL_ENVIDO_RECT)               
 
-                pygame.draw.rect(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_ACEPTAR_EVDO_RECT)
-                scrn.VENTANA_PRINCIPAL.blit(BTN_ACEPTAR_EVDO, BTN_ACEPTAR_EVDO_RECT)
+                scrn.VENTANA_PRINCIPAL.blit(btn_aceptar_evdo, btn_aceptar_evdo_rect)
             
-                pygame.draw.rect(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_RECHAZAR_EVDO_RECT)
-                scrn.VENTANA_PRINCIPAL.blit(BTN_RECHAZAR_EVDO, BTN_RECHAZAR_EVDO_RECT)
+                scrn.VENTANA_PRINCIPAL.blit(btn_rechazar_evdo, btn_rechazar_evdo_rect)
           
 
             
@@ -597,6 +603,8 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
 
         # ====================================== Actualización de elementos en pantalla ======================================
 
+        
+
         # Mostrar cartas del jugador
         scrn.VENTANA_PRINCIPAL.blit(carta_1, hit_box_carta_1)
         scrn.VENTANA_PRINCIPAL.blit(carta_2, hit_box_carta_2)
@@ -612,14 +620,14 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
                 
         # Mostrar botones envido
         
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_ENVIDO, BTN_ENVIDO_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_REAL_ENVIDO, BTN_REAL_ENVIDO_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_FALTA_ENVIDO, BTN_FALTA_ENVIDO_RECT)
+        scrn.VENTANA_PRINCIPAL.blit(btn_envido, btn_envido_rect)
+        scrn.VENTANA_PRINCIPAL.blit(btn_real_envido, btn_real_envido_rect)
+        scrn.VENTANA_PRINCIPAL.blit(btn_falta_envido, btn_falta_envido_rect)
         
         # Mostrar botones truco
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_TRUCO, BTN_TRUCO_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_RE_TRUCO, BTN_RE_TRUCO_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_VALE_CUATRO, BTN_VALE_CUATRO_RECT)      
+        scrn.VENTANA_PRINCIPAL.blit(btn_truco, btn_truco_rect)
+        scrn.VENTANA_PRINCIPAL.blit(btn_retruco, btn_retruco_rect)
+        scrn.VENTANA_PRINCIPAL.blit(btn_vale_cuatro, btn_vale_cuatro_rect)    
         
         # Mostrar textos       
         PTS_JUGADOR, PTS_JUGADOR_RECT = txt.mostrar_puntos(puntos_jugador, "jugador", 800, 225)
@@ -687,7 +695,6 @@ def jugar_vs_estrategico(puntos_objetivo : int, rondas : int, puntos_jugador : i
 
     pygame.quit()
 
-
 def elegir_rival() -> str:
     
     ''' Función que genera y muestra al usuario la vista que le permite seleccionarl el tipo de rival al que se quiere enfrentar.
@@ -695,30 +702,28 @@ def elegir_rival() -> str:
 
     pygame.init()
 
+    caballero, caballero_rect = cargar_imagen("caballero", "./media/imagenes/caballero.png", ((scrn.ANCHO_PANTALLA // 2 - 200),(scrn.ALTO_PANTALLA // 2) -20 ))
+    mago, mago_rect = cargar_imagen("mago", "./media/imagenes/mago.png", ((scrn.ANCHO_PANTALLA // 2 + 200), (scrn.ALTO_PANTALLA // 2)))
+
     run_game = True
 
     while run_game: # Bucle de ejecución del juego
       
 
-        BTN_ALEATORIO, BTN_ALEATORIO_RECT = crear_boton("Arial", 30, 195, 40, "Rival aleatorio", clrs.NEGRO, 
-                                                        (scrn.ANCHO_PANTALLA // 2 - 250), (scrn.ALTO_PANTALLA // 2) )
-
-        BTN_ESTRATEGICO, BTN_ESTRATEGICO_RECT = crear_boton("Arial", 30, 220, 40, "Rival estratégico", clrs.NEGRO,
-                                                            (scrn.ANCHO_PANTALLA // 2 + 120), (scrn.ALTO_PANTALLA // 2))
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if BTN_ALEATORIO_RECT.collidepoint(event.pos):
+                if caballero_rect.collidepoint(event.pos):
                     return "aleatorio"
-                if BTN_ESTRATEGICO_RECT.collidepoint(event.pos):
+                if mago_rect.collidepoint(event.pos):
                     return "estrategico"
         scrn.VENTANA_PRINCIPAL.fill(clrs.NEGRO)
         
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_ALEATORIO, BTN_ALEATORIO_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_ESTRATEGICO, BTN_ESTRATEGICO_RECT)
-                
+        scrn.VENTANA_PRINCIPAL.blit(caballero, caballero_rect)
+        scrn.VENTANA_PRINCIPAL.blit(mago, mago_rect)
+        scrn.VENTANA_PRINCIPAL.blit(txt.RIVAL_ALEATORIO, txt.RIVAL_ALEATORIO_RECT)        
+        scrn.VENTANA_PRINCIPAL.blit(txt.RIVAL_ESTRATEGICO, txt.RIVAL_ESTRATEGICO_RECT)        
         pygame.display.update()
     
 
@@ -773,7 +778,7 @@ def obtener_nombre() -> str:
 
     pygame.init()
 
-    x = 200
+    x = 230
     y = 275
 
     run_game = True
@@ -783,6 +788,8 @@ def obtener_nombre() -> str:
 
     TEXT_INPUT = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((x , y), (500, 50)), manager=MANAGER, 
                                                      object_id="#main_text_entry") # Se crea el objeto que representa la barra para ingresar texto
+
+    fondo_piedra = pygame.image.load("./media/imagenes/fondo_piedra.jpg")
 
     while run_game: # Bucle de ejecución del juego
         UI_REFRESH_RATE = CLOCK.tick(60) / 1000
@@ -798,6 +805,8 @@ def obtener_nombre() -> str:
         MANAGER.update(UI_REFRESH_RATE)
          
         scrn.VENTANA_PRINCIPAL.fill(clrs.BLANCO)
+        
+        scrn.VENTANA_PRINCIPAL.blit(fondo_piedra)
         
         MANAGER.draw_ui(scrn.VENTANA_PRINCIPAL)    
 
@@ -817,28 +826,30 @@ def elegir_puntos() -> int:
 
     run_game = True
 
+    fondo, fondo_rect = cargar_imagen("fondo", "./media/imagenes/fondo_puntos.jpg", ((scrn.ANCHO_PANTALLA // 2), ((scrn.ALTO_PANTALLA // 2) + 50)))
+    btn_quince, btn_quince_rect = cargar_imagen("15", "./media/imagenes/cartel_15pts.png", (245, 250))
+    btn_treinta, btn_treinta_rect = cargar_imagen("15", "./media/imagenes/cartel_30.png", (680, 250))
+    btn_cinco, btn_cinco_rect = cargar_imagen("15", "./media/imagenes/cartel_5.png", (469, 380))
+
     while run_game: # Bucle de ejecución del juego
       
-
-        BTN_QUINCE, BTN_QUINCE_RECT = crear_boton("Arial", 30, 150, 40, "15 Puntos", clrs.NEGRO, 245, 250)
-        BTN_TREINTA, BTN_TREINTA_RECT = crear_boton("Arial", 30, 150, 40, "30 Puntos", clrs.NEGRO, 580, 250)
-        BTN_CINCO, BTN_CINCO_RECT = crear_boton("Arial", 30, 130, 40, "5 Puntos", clrs.NEGRO, 370, 350)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run_game = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if BTN_TREINTA_RECT.collidepoint(event.pos):
+                if btn_treinta_rect.collidepoint(event.pos):
                     return 30
-                elif BTN_QUINCE_RECT.collidepoint(event.pos):
+                elif btn_quince_rect.collidepoint(event.pos):
                     return 15
-                elif BTN_CINCO_RECT.collidepoint(event.pos):
+                elif btn_cinco_rect.collidepoint(event.pos):
                     return 5
         scrn.VENTANA_PRINCIPAL.fill(clrs.NEGRO)
         
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_QUINCE, BTN_QUINCE_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_TREINTA, BTN_TREINTA_RECT)
-        mostrar_boton(scrn.VENTANA_PRINCIPAL, clrs.BLANCO, BTN_CINCO, BTN_CINCO_RECT)
+        scrn.VENTANA_PRINCIPAL.blit(fondo, fondo_rect)
+
+        scrn.VENTANA_PRINCIPAL.blit(btn_quince, btn_quince_rect)
+        scrn.VENTANA_PRINCIPAL.blit(btn_treinta, btn_treinta_rect)
+        scrn.VENTANA_PRINCIPAL.blit(btn_cinco, btn_cinco_rect)
                 
         pygame.display.update()
     

@@ -2,12 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\media",
-    "\\media\\imagenes",
+    "\\media\\audio",
     "\\media\\registros",
     "\\scripts",
-    "\\scripts\\config",
     "\\scripts\\funciones"
   ],
-  "SelectedNode": "\\scripts\\main.py",
+  "SelectedNode": "\\scripts\\funciones\\vistas.py",
   "PreviewInSolutionExplorer": false
 }

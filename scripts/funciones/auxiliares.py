@@ -150,7 +150,4 @@ def actualizar_registros(nombre_jugador: str, victoria: bool, derrota: bool):
         escritor = csv.writer(archivo)
         escritor.writerows(registros)
 
-def ordenar_cartas(lista_cartas : list) -> list:
-    
-    cartas_ordenadas = sorted(lista_cartas, key = lambda carta : carta["Orden"])
-    
+
